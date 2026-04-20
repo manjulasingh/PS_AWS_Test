@@ -3,23 +3,23 @@
 # Update package index
 sudo apt-get update -y
 
-# Verify Java installation
-java -version
+# Install Java
+sudo apt-get install -y fontconfig
 
-# Add Jenkins GPG key
-sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
-  https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+# Install curl and gnupg if not present
+sudo apt-get install -y curl gnupg
+
+# Add Jenkins GPG key using curl
+curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | \
+  sudo gpg --dearmor -o /usr/share/keyrings/jenkins-keyring.gpg
 
 # Add Jenkins repository
-echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.gpg] \
   https://pkg.jenkins.io/debian-stable binary/" | \
   sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
 
-# Update package index
+# Update and install Jenkins
 sudo apt-get update -y
-
-# Install Jenkins
 sudo apt-get install -y jenkins
 
 echo "Jenkins installation complete!"
-echo "To start Jenkins manually, run: sudo systemctl start jenkins"
